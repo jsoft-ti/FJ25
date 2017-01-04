@@ -36,6 +36,12 @@ public class TestaInsereConta {
 		long fim = System.currentTimeMillis();
 		System.out.println(String.format("Inicio %d Fim %d" , inicio,fim));
 		System.out.println("----------------------" );
+		
+		Conta modificada = dao.busca(7);
+		conta.setTitular("Modificado");
+		conta.setBanco("Bradesco");
+		
+		
 		List<Conta> lista = dao.lista();
 		for(Conta conta1: lista){
 			System.out.println(String.format("%s    %s      %s", conta1.getNumero(),conta1.getBanco(),conta1.getTitular()));

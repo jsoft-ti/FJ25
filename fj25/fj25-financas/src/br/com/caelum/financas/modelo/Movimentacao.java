@@ -9,6 +9,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -58,6 +60,14 @@ public class Movimentacao {
 	public void setConta(Conta conta) {
 		this.conta = conta;
 	}
+	
+	@PrePersist
+	@PreUpdate
+	public void preAlterar(){
+		System.out.println("Atualizando a data da movimentação" );
+		this.setData(Calendar.getInstance());
+	}
+	
 
 	
 }

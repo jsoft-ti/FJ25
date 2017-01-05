@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
 <fullyQualifiedTypeName name="antlr.collections.List"/>
-<fullyQualifiedTypeName name="br.com.caelum.financas.dao.ContaDao"/>
-<fullyQualifiedTypeName name="java.util.List"/>
 <fullyQualifiedTypeName name="org.hibernate.annotations.DynamicInsert"/>
 <fullyQualifiedTypeName name="org.hibernate.annotations.DynamicUpdate"/>
 <fullyQualifiedTypeName name="javax.persistence.Entity"/>
@@ -13,11 +11,16 @@
 <fullyQualifiedTypeName name="javax.persistence.Enumerated"/>
 <fullyQualifiedTypeName name="javax.persistence.EnumType"/>
 <fullyQualifiedTypeName name="javax.persistence.ManyToOne"/>
-<fullyQualifiedTypeName name="br.com.caelum.financas.modelo.Movimentacao"/>
-<fullyQualifiedTypeName name="java.util.Calendar"/>
 <fullyQualifiedTypeName name="java.math.BigDecimal"/>
 <fullyQualifiedTypeName name="br.com.caelum.financas.modelo.TipoMovimentacao"/>
-<fullyQualifiedTypeName name="javax.persistence.EntityManager"/>
-<fullyQualifiedTypeName name="br.com.caelum.financas.util.JPAUtil"/>
 <fullyQualifiedTypeName name="br.com.caelum.financas.modelo.Conta"/>
+<fullyQualifiedTypeName name="br.com.caelum.financas.modelo.Movimentacao"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="br.com.caelum.financas.dao.ContaDao"/>
+<fullyQualifiedTypeName name="javax.persistence.EntityManager"/>
+<fullyQualifiedTypeName name="br.com.caelum.financas.dao.MovimentacaoDao"/>
+<fullyQualifiedTypeName name="br.com.caelum.financas.util.JPAUtil"/>
+<fullyQualifiedTypeName name="javax.persistence.PrePersist"/>
+<fullyQualifiedTypeName name="javax.persistence.PreUpdate"/>
+<fullyQualifiedTypeName name="java.util.Calendar"/>
 </qualifiedTypeNameHistroy>

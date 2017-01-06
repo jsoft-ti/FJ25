@@ -1,9 +1,30 @@
 package br.com.caelum.financas.service;
 
+import java.util.concurrent.TimeUnit;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.ejb.AccessTimeout;
+import javax.ejb.Singleton;
+import javax.ejb.Stateless;
+
+@Singleton
+@AccessTimeout(unit = TimeUnit.SECONDS,value=5)
 public class Agendador {
 
 	private static int totalCriado;
 
+	@PostConstruct
+	void posConstrucao(){
+		System.out.println("criando agendador");
+		totalCriado++;
+	}
+	
+	@PreDestroy
+	void preDestruicao(){
+		System.out.println("Destrufindo o agendador");
+	}
+	
 	public void executa() {
 		System.out.printf("%d instancias criadas %n", totalCriado);
 

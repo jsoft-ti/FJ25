@@ -1,9 +1,12 @@
 package br.com.caelum.financas.mb;
 
 import java.math.BigDecimal;
+
+import br.com.caelum.financas.dao.MovimentacaoDao;
 import br.com.caelum.financas.modelo.Conta;
 import br.com.caelum.financas.modelo.TipoMovimentacao;
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 @Named
@@ -15,8 +18,12 @@ public class TotalMovimentadoBean {
 	private TipoMovimentacao tipoMovimentacao;
 	
 
+	@Inject
+	private MovimentacaoDao dao;
+	
 	public void calcula() {
 		System.out.println("Total movimentado pela conta");
+		this.total = dao.calculaTotalMovimentacao(conta, this.tipoMovimentacao);
 
 	}
 

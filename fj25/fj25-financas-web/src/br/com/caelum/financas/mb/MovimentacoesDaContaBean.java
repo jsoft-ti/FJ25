@@ -1,9 +1,15 @@
 package br.com.caelum.financas.mb;
 
+import java.math.BigDecimal;
 import java.util.List;
+
+import br.com.caelum.financas.dao.MovimentacaoDao;
 import br.com.caelum.financas.modelo.Conta;
 import br.com.caelum.financas.modelo.Movimentacao;
+import br.com.caelum.financas.modelo.TipoMovimentacao;
+
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 @Named
@@ -13,7 +19,11 @@ public class MovimentacoesDaContaBean {
 	private List<Movimentacao> movimentacoes;
 	private Conta conta = new Conta();
 	
+	@Inject
+	private MovimentacaoDao dao;
+	
 	public void lista() {
+		this.movimentacoes = dao.listaTodasMovimentacoes(conta);
 
 	}
 
@@ -28,4 +38,6 @@ public class MovimentacoesDaContaBean {
 	public void setConta(Conta conta) {
 		this.conta = conta;
 	}
+	
+	
 }

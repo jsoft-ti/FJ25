@@ -77,7 +77,7 @@ return query.getResultList();
 }
 
 public List<ValorPorMesEAno> listaMesesComMovimentacoes(Conta conta,TipoMovimentacao tipo){
-	String jpql = "select new br.com.caelum.financas.modelo.ValorPorMesEAno(sum(m.valor), month(m.data), year(m.data)) "
+	String jpql = "select new "+ValorPorMesEAno.class.getCanonicalName()+"(sum(m.valor), month(m.data), year(m.data)) "
 			+ "from Movimentacao m "
 			+ " where m.conta = :conta and m.tipoMovimentacao =:tipo "
 			+ "group by year(m.data), month(m.data) "

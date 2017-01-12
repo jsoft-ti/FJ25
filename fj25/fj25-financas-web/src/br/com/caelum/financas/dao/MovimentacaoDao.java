@@ -1,15 +1,23 @@
 package br.com.caelum.financas.dao;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import br.com.caelum.financas.exception.ValorInvalidoException;
+import br.com.caelum.financas.modelo.Categoria;
 import br.com.caelum.financas.modelo.Conta;
 import br.com.caelum.financas.modelo.Movimentacao;
 import br.com.caelum.financas.modelo.TipoMovimentacao;
@@ -17,10 +25,11 @@ import br.com.caelum.financas.modelo.ValorPorMesEAno;
 
 @Stateless
 public class MovimentacaoDao {
-	@PersistenceContext
+	@Inject	//@PersistenceContext
 	EntityManager manager;
 
 	public void adiciona(Movimentacao movimentacao) {
+		manager.joinTransaction();
 		this.manager.persist(movimentacao);
 		if(movimentacao.getValor().compareTo(BigDecimal.ZERO)<0){
 			throw new ValorInvalidoException("Movimentação Negativa");
@@ -28,14 +37,23 @@ public class MovimentacaoDao {
 	}
 
 	public Movimentacao busca(Integer id) {
+		manager.joinTransaction();
 		return this.manager.find(Movimentacao.class, id);
 	}
 
 	public List<Movimentacao> lista() {
+		manager.joinTransaction();
 		return this.manager.createQuery("select m from Movimentacao m", Movimentacao.class).getResultList();
+	}
+	
+	public List<Movimentacao> listaComCategorias(){
+		manager.joinTransaction();
+		return this.manager.createQuery("Select distinct m from Movimentacao m left join fetch m.categorias", Movimentacao.class).getResultList();
+
 	}
 
 	public void remove(Movimentacao movimentacao) {
+		manager.joinTransaction();
 		Movimentacao movimentacaoParaRemover = this.manager.find(Movimentacao.class, movimentacao.getId());
 		this.manager.remove(movimentacaoParaRemover);
 	}
@@ -55,6 +73,7 @@ public List<Movimentacao> listaPorValorETipo(BigDecimal valor, TipoMovimentacao 
 Query query = this.manager.createQuery(jpql);
 query.setParameter("valor", valor);
 query.setParameter("tipo", tipo);
+query.setHint("org.hibernate.cacheable", "true");
 return query.getResultList();
 	}
 
@@ -89,4 +108,48 @@ public List<ValorPorMesEAno> listaMesesComMovimentacoes(Conta conta,TipoMoviment
 	List<ValorPorMesEAno> lista = query.getResultList();
 	return lista;
 }
+
+public List<Movimentacao> listaTodasComCriteria(){
+	CriteriaBuilder builder = this.manager.getCriteriaBuilder();
+	CriteriaQuery<Movimentacao> criteria = builder.createQuery(Movimentacao.class);
+	criteria.from(Movimentacao.class);
+	
+	return this.manager.createQuery(criteria).getResultList();
+}
+
+public BigDecimal somaMovimentacoesDoTitular(String titular){
+	CriteriaBuilder builder = this.manager.getCriteriaBuilder();
+	CriteriaQuery<BigDecimal> criteria = builder.createQuery(BigDecimal.class);
+	
+	Root<Movimentacao> root = criteria.from(Movimentacao.class);
+	criteria.select(builder.sum(root.<BigDecimal>get("valor")));
+	criteria.where(builder.like(root.<Conta>get("conta").<String>get("titular"), "%"+titular+"%" ));
+	return this.manager.createQuery(criteria).getSingleResult();
+}
+
+public List<Movimentacao> pesquisa(Conta conta, TipoMovimentacao tipoMovimentacao, Integer mes){
+	CriteriaBuilder builder = manager.getCriteriaBuilder();
+	CriteriaQuery<Movimentacao> criteria = builder.createQuery(Movimentacao.class);
+	
+	Root<Movimentacao> root = criteria.from(Movimentacao.class);
+	
+	Predicate conjunction = builder.conjunction();
+	if(conta.getId() != null){
+		conjunction = builder.and(conjunction,builder.equal(root.<Conta>get("conta"),conta));
+	}
+	
+	if (mes != null && mes != 0){
+		Expression<Integer> expression = builder.function("month", Integer.class, root.<Calendar>get("data"));
+		conjunction = builder.and(conjunction,builder.equal(expression, mes));
+	}
+	
+	if(tipoMovimentacao != null){
+		conjunction = builder.and(conjunction, builder.equal(root.<TipoMovimentacao>get("tipoMovimentacao"), tipoMovimentacao));
+	}
+	
+	criteria.where(conjunction);
+	
+	return manager.createQuery(criteria).getResultList();
+	}
+
 }

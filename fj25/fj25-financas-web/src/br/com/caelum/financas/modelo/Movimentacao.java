@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -17,6 +18,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 @Entity
+@Cacheable
 public class Movimentacao implements Serializable {
  
 	private static final long serialVersionUID = 1L;
@@ -31,7 +33,9 @@ public class Movimentacao implements Serializable {
 	@ManyToOne 
 	private Conta conta;
 	
-	@ManyToMany(fetch=FetchType.EAGER)
+	
+	
+	@ManyToMany
 	private List<Categoria> categorias = new ArrayList<Categoria>();
 	
 	

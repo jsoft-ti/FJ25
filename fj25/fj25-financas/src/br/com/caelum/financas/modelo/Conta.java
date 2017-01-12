@@ -4,10 +4,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Entity @DynamicInsert @DynamicUpdate
+@Cache(usage =CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Conta {
 	@Id
 	@GeneratedValue

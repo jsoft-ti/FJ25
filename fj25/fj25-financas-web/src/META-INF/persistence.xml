@@ -23,7 +23,7 @@
 			<!-- poderia ser: update, create, create-drop, none -->
 			
 			<property name="hibernate.cache.use_query_cache" value="true"/>
-			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<property name="hibernate.hbm2ddl.auto" value="create" />
 		</properties>
 	</persistence-unit>
 

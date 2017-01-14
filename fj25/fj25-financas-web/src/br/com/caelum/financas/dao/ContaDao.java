@@ -6,6 +6,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import br.com.caelum.financas.modelo.Conta;
 
@@ -14,6 +15,15 @@ public class ContaDao {
 	@Inject//@PersistenceContext
 	EntityManager manager;
 
+	public int trocaNomeDoBancoEmLote(String antigoNomeBanco, String novoNomeBanco){
+		String jpql = "UPDATE Conta c SET c.banco = :novoNome "
+					+ "WHERE c.banco =:antigoNome";
+		
+		Query query = manager.createQuery(jpql);
+		query.setParameter("antigoNome", antigoNomeBanco);
+		query.setParameter("novoNome", novoNomeBanco);
+		return query.executeUpdate();
+	}
 	public void adiciona(Conta conta) {
 		this.manager.persist(conta);
 	}
